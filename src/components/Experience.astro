@@ -1,0 +1,65 @@
+---
+import { site } from "../data/site";
+---
+
+<!-- EXPERIENCE SECTION — Professional work history styled like a newspaper feature article -->
+<section id="experience" class="max-w-4xl mx-auto px-6 py-10">
+  <h2 class="font-sans text-xs font-semibold tracking-widest uppercase text-highlight mb-6">
+    Professional Experience
+  </h2>
+
+  {site.experience.map((job) => (
+    <div>
+      <!-- Job header -->
+      <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+        <h3 class="font-headline text-2xl font-bold">{job.role}</h3>
+        <span class="font-sans text-xs text-ink-muted dark:text-night-ink-muted uppercase tracking-wider">
+          {job.duration}
+        </span>
+      </div>
+
+      <p class="text-sm font-sans font-medium text-ink-muted dark:text-night-ink-muted uppercase tracking-wider mb-4">
+        {job.focus}
+      </p>
+
+      <!-- Highlights — like bullet points in a newspaper profile -->
+      <ul class="space-y-2 border-l-2 border-rule dark:border-night-rule pl-4">
+        {job.highlights.map((h) => (
+          <li class="text-sm text-ink-light dark:text-night-ink leading-relaxed">
+            {h}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+
+  <div class="rule mt-10"></div>
+</section>
+
+<!-- JOURNEY SECTION — Development timeline styled like a newspaper chronology -->
+<section class="max-w-4xl mx-auto px-6 py-10">
+  <h2 class="font-sans text-xs font-semibold tracking-widest uppercase text-highlight mb-6">
+    Development Journey
+  </h2>
+
+  <div class="space-y-0 border-l-2 border-rule dark:border-night-rule ml-2">
+    {site.journey.map((step, i) => (
+      <div class="relative pl-6 pb-6 last:pb-0">
+        <!-- Timeline dot -->
+        <div class:list={[
+          "absolute -left-[7px] top-1 w-3 h-3 border-2 border-rule dark:border-night-rule rounded-full",
+          i === site.journey.length - 1 ? "bg-highlight" : "bg-paper dark:bg-night",
+        ]}></div>
+
+        <h4 class="font-headline text-base font-bold leading-snug">
+          {step.phase}
+        </h4>
+        <p class="mt-1 text-sm text-ink-light dark:text-night-ink leading-relaxed">
+          {step.summary}
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <div class="rule mt-10"></div>
+</section>

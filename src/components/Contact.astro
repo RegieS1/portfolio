@@ -1,0 +1,65 @@
+---
+import { site } from "../data/site";
+const year = new Date().getFullYear();
+---
+
+<!-- CONTACT SECTION — Styled like a newspaper classified ad -->
+<section id="contact" class="max-w-4xl mx-auto px-6 py-10">
+  <h2 class="font-sans text-xs font-semibold tracking-widest uppercase text-highlight mb-6">
+    Get in Touch
+  </h2>
+
+  <div class="border-2 border-ink dark:border-night-ink p-8 max-w-lg mx-auto text-center">
+    <p class="font-headline text-2xl font-bold mb-2">
+      Open to New Opportunities
+    </p>
+    <p class="text-sm text-ink-light dark:text-night-ink leading-relaxed mb-4">
+      {site.goal}
+    </p>
+
+    <!-- CONTACT BUTTONS -->
+    <div class="flex flex-wrap justify-center gap-3">
+      <a
+        href={`https://mail.google.com/mail/?view=cm&to=${site.email}`}
+      target="_blank"
+      rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 bg-ink dark:bg-night-ink text-paper dark:text-night px-5 py-2.5 text-sm font-sans font-medium tracking-wide uppercase hover:bg-highlight transition-colors"
+      >
+        Write to Me
+      </a>
+
+      {site.github && (
+        <a
+          href={site.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-ink dark:border-night-ink px-5 py-2.5 text-sm font-sans font-medium tracking-wide uppercase hover:bg-ink hover:text-paper dark:hover:bg-night-ink dark:hover:text-night transition-colors"
+        >
+          GitHub
+        </a>
+      )}
+
+      {site.linkedin && (
+        <a
+          href={site.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 border border-ink dark:border-night-ink px-5 py-2.5 text-sm font-sans font-medium tracking-wide uppercase hover:bg-ink hover:text-paper dark:hover:bg-night-ink dark:hover:text-night transition-colors"
+        >
+          LinkedIn
+        </a>
+      )}
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="max-w-4xl mx-auto px-6">
+  <div class="rule rule-thick"></div>
+  <div class="py-6 flex items-center justify-between text-xs font-sans text-ink-muted dark:text-night-ink-muted uppercase tracking-wider">
+    <span>&copy; {year} {site.name}</span>
+    <span class="font-headline text-sm normal-case italic">
+      &ldquo;Keep learning, keep building.&rdquo;
+    </span>
+  </div>
+</footer>

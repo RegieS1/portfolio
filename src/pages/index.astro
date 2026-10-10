@@ -1,0 +1,27 @@
+---
+// ── PAGE ASSEMBLY ──
+// To add a new section:
+//   1. Create a component in src/components/
+//   2. Import it below
+//   3. Place it in <main> where you want it
+
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import Experience from "../components/Experience.astro";
+import Work from "../components/Work.astro";
+import Contact from "../components/Contact.astro";
+import { site } from "../data/site";
+---
+
+<Base title={`${site.name} — Portfolio`}>
+  <Nav />
+  <main>
+    <Hero />
+    <About />
+    <Experience />
+    <Work />
+    <Contact />
+  </main>
+</Base>

@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── NEWSPAPER FONTS ──
+     Headline: Playfair Display (classic serif)
+     Body: Source Serif 4 (readable serif)
+     Mono: for small labels */
+  --font-headline: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* ── NEWSPAPER COLORS ──
+     Light mode: warm newsprint paper with dark ink
+     Dark mode: dark paper with cream ink */
+  --color-paper: #f5f0e8;
+  --color-paper-dark: #ece5d8;
+  --color-ink: #1a1a1a;
+  --color-ink-light: #4a4a4a;
+  --color-ink-muted: #8a8070;
+  --color-rule: #c8bfb0;
+  --color-rule-dark: #a89f90;
+  --color-highlight: #c8372d;
+
+  --color-night: #1a1815;
+  --color-night-card: #24221e;
+  --color-night-ink: #e8e0d0;
+  --color-night-ink-muted: #9a9080;
+  --color-night-rule: #3a3530;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+::selection {
+  background-color: var(--color-highlight);
+  color: white;
+}
+
+/* ── NEWSPAPER RULE LINES ── */
+.rule {
+  border: none;
+  height: 1px;
+  background: var(--color-rule);
+  max-width: 56rem;
+  margin: 0 auto;
+}
+.dark .rule {
+  background: var(--color-night-rule);
+}
+.rule-thick {
+  height: 3px;
+}
+.rule-double {
+  height: 1px;
+  border-bottom: 3px solid var(--color-rule);
+  background: var(--color-rule);
+}
+.dark .rule-double {
+  border-color: var(--color-night-rule);
+  background: var(--color-night-rule);
+}
+
+/* ── DROP CAP (first letter of about section) ── */
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-headline);
+  font-size: 3.5rem;
+  line-height: 0.8;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  font-weight: 700;
+}
+
+/* ── NEWSPAPER IMAGE STYLE ──
+   Grayscale + sepia tint by default (like a printed newspaper photo).
+   On hover the image reveals full color. */
+.news-photo {
+  filter: grayscale(100%) sepia(20%) contrast(1.1);
+  transition: filter 0.4s ease;
+}
+.group:hover .news-photo {
+  filter: grayscale(0%) sepia(0%) contrast(1);
+}
+
+/* ── COLUMN LAYOUT for wider screens ── */
+@media (min-width: 640px) {
+  .newspaper-cols {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--color-rule);
+  }
+  .dark .newspaper-cols {
+    column-rule-color: var(--color-night-rule);
+  }
+}

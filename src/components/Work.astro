@@ -1,0 +1,211 @@
+---
+import { site } from "../data/site";
+---
+
+<!-- WORK SECTION — Projects as newspaper articles. Clicking opens an image gallery slider. -->
+<section id="work" class="max-w-4xl mx-auto px-6 py-10">
+  <h2 class="font-sans text-xs font-semibold tracking-widest uppercase text-highlight mb-6">
+    Featured Work
+  </h2>
+
+  <!-- PROJECT GRID -->
+  <div class="grid gap-0 sm:grid-cols-2 border-t border-rule dark:border-night-rule">
+    {site.projects.map((p, i) => (
+      <div
+        class:list={[
+          "group cursor-pointer p-5 border-b border-rule dark:border-night-rule hover:bg-paper-dark dark:hover:bg-night-card transition-colors",
+          i % 2 === 0 ? "sm:border-r" : "",
+        ]}
+        data-gallery={JSON.stringify({
+          title: p.title,
+          images: p.images,
+          captions: p.captions,
+          url: p.url,
+        })}
+      >
+        <!-- THUMBNAIL — First image from the gallery, newspaper grayscale style -->
+        {p.images.length > 0 && (
+          <figure class="mb-4">
+            <div class="border border-rule dark:border-night-rule overflow-hidden relative">
+              <img
+                src={p.images[0]}
+                alt={p.title}
+                class="news-photo w-full h-40 object-cover object-top"
+                loading="lazy"
+              />
+              <!-- Image count badge — shows how many photos are in the gallery -->
+              {p.images.length > 1 && (
+                <span class="absolute bottom-2 right-2 bg-ink/70 text-paper px-2 py-0.5 text-xs font-sans rounded">
+                  1 / {p.images.length}
+                </span>
+              )}
+            </div>
+            {p.captions[0] && (
+              <figcaption class="mt-1.5 text-xs font-sans italic text-ink-muted dark:text-night-ink-muted">
+                {p.captions[0]}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        <p class="font-sans text-xs text-ink-muted dark:text-night-ink-muted uppercase tracking-wider mb-2">
+          No. {String(i + 1).padStart(2, "0")}
+        </p>
+
+        <h3 class="font-headline text-xl font-bold leading-snug group-hover:text-highlight transition-colors">
+          {p.title}
+        </h3>
+
+        <p class="mt-2 text-sm text-ink-light dark:text-night-ink leading-relaxed">
+          {p.description}
+        </p>
+
+        <p class="mt-3 text-xs font-sans text-ink-muted dark:text-night-ink-muted uppercase tracking-wider">
+          {p.tags.join(" / ")}
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <div class="rule mt-10"></div>
+</section>
+
+<!-- GALLERY MODAL — Opens when a project card is clicked.
+     Slide left/right to browse images. Press X or click outside to close. -->
+<div id="gallery-modal" class="fixed inset-0 z-[100] hidden">
+  <!-- Backdrop -->
+  <div id="gallery-backdrop" class="absolute inset-0 bg-ink/80 dark:bg-night/90 backdrop-blur-sm"></div>
+
+  <!-- Modal content -->
+  <div class="relative z-10 flex flex-col items-center justify-center h-full px-4">
+    <!-- Close button -->
+    <button id="gallery-close" class="absolute top-4 right-4 text-paper/80 hover:text-paper text-2xl font-sans p-2 transition-colors">
+      &times;
+    </button>
+
+    <!-- Gallery title -->
+    <h3 id="gallery-title" class="font-headline text-xl font-bold text-paper mb-4"></h3>
+
+    <!-- Image container with arrows -->
+    <div class="relative w-full max-w-2xl">
+      <!-- Left arrow -->
+      <button id="gallery-prev" class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-ink/50 hover:bg-ink/80 text-paper w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors">
+        &#8592;
+      </button>
+
+      <!-- Image -->
+      <div class="border-2 border-paper/20 overflow-hidden">
+        <img id="gallery-img" src="" alt="" class="w-full object-contain max-h-[70vh]" />
+      </div>
+
+      <!-- Right arrow -->
+      <button id="gallery-next" class="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-ink/50 hover:bg-ink/80 text-paper w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors">
+        &#8594;
+      </button>
+    </div>
+
+    <!-- Caption -->
+    <p id="gallery-caption" class="mt-3 text-sm font-sans italic text-paper/70 text-center max-w-lg"></p>
+
+    <!-- Dots indicator -->
+    <div id="gallery-dots" class="mt-4 flex gap-2 justify-center"></div>
+
+    <!-- View project link -->
+    <a id="gallery-link" href="#" target="_blank" class="mt-4 text-xs font-sans uppercase tracking-widest text-paper/60 hover:text-paper underline underline-offset-4 transition-colors">
+      View Project &rarr;
+    </a>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var modal = document.getElementById("gallery-modal");
+    var img = document.getElementById("gallery-img");
+    var caption = document.getElementById("gallery-caption");
+    var title = document.getElementById("gallery-title");
+    var dots = document.getElementById("gallery-dots");
+    var link = document.getElementById("gallery-link");
+    var current = 0;
+    var data = null;
+
+    function show(index) {
+      current = index;
+      img.src = data.images[index];
+      img.alt = data.title + " screenshot " + (index + 1);
+      caption.textContent = data.captions[index] || "";
+
+      var allDots = dots.querySelectorAll("button");
+      for (var d = 0; d < allDots.length; d++) {
+        allDots[d].style.opacity = d === index ? "1" : "0.4";
+      }
+
+      document.getElementById("gallery-prev").style.display = data.images.length > 1 ? "flex" : "none";
+      document.getElementById("gallery-next").style.display = data.images.length > 1 ? "flex" : "none";
+    }
+
+    function open(galleryData) {
+      data = galleryData;
+      title.textContent = data.title;
+
+      if (data.url && data.url !== "#") {
+        link.href = data.url;
+        link.style.display = "inline";
+      } else {
+        link.style.display = "none";
+      }
+
+      dots.innerHTML = "";
+      for (var i = 0; i < data.images.length; i++) {
+        var dot = document.createElement("button");
+        dot.className = "w-2 h-2 rounded-full bg-paper transition-opacity";
+        dot.setAttribute("data-idx", i);
+        dot.addEventListener("click", function () {
+          show(parseInt(this.getAttribute("data-idx")));
+        });
+        dots.appendChild(dot);
+      }
+
+      show(0);
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function close() {
+      modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    // Card clicks
+    var cards = document.querySelectorAll("[data-gallery]");
+    for (var c = 0; c < cards.length; c++) {
+      cards[c].addEventListener("click", function () {
+        var d = JSON.parse(this.getAttribute("data-gallery"));
+        if (d.images && d.images.length > 0) {
+          open(d);
+        }
+      });
+    }
+
+    // Navigation
+    document.getElementById("gallery-prev").addEventListener("click", function (e) {
+      e.stopPropagation();
+      show((current - 1 + data.images.length) % data.images.length);
+    });
+    document.getElementById("gallery-next").addEventListener("click", function (e) {
+      e.stopPropagation();
+      show((current + 1) % data.images.length);
+    });
+
+    // Close
+    document.getElementById("gallery-close").addEventListener("click", close);
+    document.getElementById("gallery-backdrop").addEventListener("click", close);
+
+    // Keyboard: arrows to slide, Escape to close
+    document.addEventListener("keydown", function (e) {
+      if (modal.classList.contains("hidden")) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") show((current - 1 + data.images.length) % data.images.length);
+      if (e.key === "ArrowRight") show((current + 1) % data.images.length);
+    });
+  })();
+</script>

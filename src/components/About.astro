@@ -1,0 +1,62 @@
+---
+import { site } from "../data/site";
+---
+
+<!-- ABOUT SECTION — Bio in newspaper columns, stats, and categorized skills -->
+<section id="about" class="max-w-4xl mx-auto px-6 py-10">
+  <h2 class="font-sans text-xs font-semibold tracking-widest uppercase text-highlight mb-6">
+    About the Author
+  </h2>
+
+  <!-- BIO — Multiple paragraphs flowing into newspaper columns -->
+  <div class="newspaper-cols">
+    {site.about.map((paragraph, i) => (
+      <p class:list={[
+        "text-base leading-relaxed text-ink-light dark:text-night-ink mb-4",
+        i === 0 ? "drop-cap" : "",
+      ]}>
+        {paragraph}
+      </p>
+    ))}
+  </div>
+
+  <!-- STATS -->
+  <div class="mt-10 grid grid-cols-3 gap-0 border border-rule dark:border-night-rule divide-x divide-rule dark:divide-night-rule">
+    {site.stats.map((s) => (
+      <div class="py-4 text-center">
+        <p class="font-headline text-2xl font-bold">{s.value}</p>
+        <p class="text-xs font-sans text-ink-muted dark:text-night-ink-muted uppercase tracking-wider mt-1">{s.label}</p>
+      </div>
+    ))}
+  </div>
+
+  <!-- SKILLS — Grouped by experience level with honest labels -->
+  <div class="mt-10 space-y-6">
+    {site.skillGroups.map((group) => (
+      <div>
+        <p class="text-xs font-sans font-semibold tracking-widest uppercase text-ink-muted dark:text-night-ink-muted mb-3">
+          {group.label}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          {group.skills.map((skill) => (
+            <span class="border border-rule dark:border-night-rule px-2.5 py-1 text-xs font-sans text-ink-light dark:text-night-ink uppercase tracking-wider">
+              {skill}
+            </span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- OTHER SKILLS — Practical abilities -->
+  <div class="mt-8">
+    <p class="text-xs font-sans font-semibold tracking-widest uppercase text-ink-muted dark:text-night-ink-muted mb-3">
+      Other Development Skills
+    </p>
+    <p class="text-sm text-ink-light dark:text-night-ink leading-relaxed">
+      {site.otherSkills.join(" · ")}
+    </p>
+  </div>
+
+  <div class="rule mt-10"></div>
+</section>
